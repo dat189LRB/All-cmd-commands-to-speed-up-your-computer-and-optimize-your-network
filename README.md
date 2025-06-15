@@ -1,1 +1,1 @@
-# All-cmd-commands-to-speed-up-your-computer-and-optimize-your-network
+- The commands here help speed up your Windows microsoft cmd machine and are completely non-malicious.
