@@ -1,0 +1,68 @@
+- @echo off
+echo ===============================
+echo  TỐI ƯU HÓA KẾT NỐI MẠNG (Wi-Fi / LAN)
+echo ===============================
+echo.
+
+:: Giải phóng và gia hạn IP
+echo [1/10] Đang giải phóng IP...
+ipconfig /release
+echo [2/10] Đang làm mới IP...
+ipconfig /renew
+
+:: Xóa cache DNS và đăng ký lại
+echo [3/10] Đang xóa bộ nhớ đệm DNS...
+ipconfig /flushdns
+echo [4/10] Đang đăng ký lại DNS...
+ipconfig /registerdns
+
+:: Reset TCP/IP và Winsock
+echo [5/10] Đang đặt lại TCP/IP...
+netsh int ip reset
+echo [6/10] Đang đặt lại Winsock...
+netsh winsock reset
+
+:: Bật tối ưu TCP
+echo [7/10] Đang cấu hình tối ưu TCP...
+netsh interface tcp set global autotuninglevel=normal
+netsh interface tcp set global rss=enabled
+netsh interface tcp set global chimney=enabled
+
+:: Reset tường lửa
+echo [8/10] Đang reset tường lửa Windows...
+netsh advfirewall reset
+
+:: Xóa cache ARP
+echo [9/10] Đang xóa cache ARP...
+arp -d
+arp -a
+
+
+:: 
+echo [10/10]  Kiểm tra và giải phóng cache giao tiếp mạng..
+netsh interface ip delete arpcache
+
+
+
+:: Hiển thị cấu hình mạng hiện tại
+echo.
+echo --- Thông tin cấu hình mạng ---
+ipconfig /all
+
+:: Hiển thị thiết lập TCP hiện tại
+echo.
+echo --- Thiết lập TCP hiện tại ---
+netsh interface tcp show global
+:: Display menu to continue or exit
+echo.
+echo 1. speedtest wifi
+echo 2. Thoat
+set /p choice=Nhap lua chon cua ban (1/2): 
+
+:: Handle user choice
+if "%choice%"=="1" speedtest
+if "%choice%"=="2" exit /b
+
+:: If the user input is invalid
+echo Lua chon khong hop le. Vui long nhap 1 hoac 2.
+pause
